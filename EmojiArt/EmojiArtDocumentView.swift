@@ -17,7 +17,9 @@ struct EmojiArtDocumentView: View {
             // Swift has syntax called keypath that specifies the var on the object using backslash
             ForEach(EmojiArtDocument.palette.map { String($0) }, id: \.self) { emoji in
                 Text(emoji)
+                    .font(Font.system(size: defaultEmojiSize))
             }
         }
     }
+    private let defaultEmojiSize: CGFloat = 40
 }
