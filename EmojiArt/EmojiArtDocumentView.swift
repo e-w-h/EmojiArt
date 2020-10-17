@@ -22,6 +22,7 @@ struct EmojiArtDocumentView: View {
                 }
             }
         }
+        .padding(.horizontal)
     }
     private let defaultEmojiSize: CGFloat = 40
 }
