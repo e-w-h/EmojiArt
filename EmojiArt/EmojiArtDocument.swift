@@ -17,8 +17,10 @@ class EmojiArtDocument: ObservableObject {
     
     // MARK: - Intent(s)
     
+    // View cant access the model directly so it calls intent functions
+    
     func addEmoji(_ emoji: String, at location: CGPoint, size: CGFloat) {
-        
+        emojiArt.addEmoji(emoji, x: Int(location.x), y: Int(location.y), size: Int(size))
     }
     
     func moveEmoji(_ emoji: EmojiArt.Emoji, by offset: CGSize) {
