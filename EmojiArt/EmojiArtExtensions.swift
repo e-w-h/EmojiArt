@@ -16,3 +16,6 @@ extension Collection where Element: Identifiable {
     }
 }
 
+extension URL {
+
+}

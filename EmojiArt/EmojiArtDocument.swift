@@ -34,4 +34,8 @@ class EmojiArtDocument: ObservableObject {
     func scaleEmoji(_ emoji: EmojiArt.Emoji, by scale: CGFloat) {
 
     }
+    
+    func setBackgroundURL(_ url: URL?) {
+        emojiArt.backgroundURL = url
+    }
 }
