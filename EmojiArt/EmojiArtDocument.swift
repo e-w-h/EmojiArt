@@ -36,6 +36,6 @@ class EmojiArtDocument: ObservableObject {
     }
     
     func setBackgroundURL(_ url: URL?) {
-        emojiArt.backgroundURL = url
+        emojiArt.backgroundURL = url?.imageURL
     }
 }
