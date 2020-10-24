@@ -24,10 +24,14 @@ class EmojiArtDocument: ObservableObject {
     }
     
     func moveEmoji(_ emoji: EmojiArt.Emoji, by offset: CGSize) {
+        if let index = emojiArt.emojis.firstIndex(matching: emoji) {
+            emojiArt.emojis[index].x += Int(offset.width)
+            emojiArt.emojis[index].y += Int(offset.width)
+        }
         
     }
     
     func scaleEmoji(_ emoji: EmojiArt.Emoji, by scale: CGFloat) {
-        
+
     }
 }
