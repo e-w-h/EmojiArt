@@ -43,5 +43,29 @@ class EmojiArtDocument: ObservableObject {
     
     func setBackgroundURL(_ url: URL?) {
         emojiArt.backgroundURL = url?.imageURL
+        fetchBackgroundImageData()
+    }
+    
+    // MARK: Multithreading
+    
+    private func fetchBackgroundImageData() {
+        // Clear the background image while the app searches the internet for the image
+        backgroundImage = nil
+        // if let means the app is only fetching if there is a URL to search for
+        if let url = emojiArt.backgroundURL {
+            // Data can take a long time to load and we dont want it on the main thread
+            // The if let is still blocking but on a backgrouund queue
+            DispatchQueue.global(qos: .userInitiated).async {
+                // Fetching on the interent can run into a lot of errors that we need "try" to deal with
+                if let imageData = try? Data(contentsOf: url) {
+                    // Drawing always has to happen on the main thread
+                    // Posting asynchronously causes the queue to run
+                    DispatchQueue.main.async {
+                        self.backgroundImage = UIImage(data: imageData)
+                    }
+                }
+            }
+
+        }
     }
 }
