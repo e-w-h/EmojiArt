@@ -26,7 +26,22 @@ struct EmojiArtDocumentView: View {
             .padding(.horizontal)
             Rectangle().foregroundColor(.yellow)
                 .edgesIgnoringSafeArea([.horizontal, .bottom])
+                // Public image is a URI that covers anything that falls under the specification of an image
+                // NSObject providers provide information thats being dropped
+                .onDrop(of: ["public.image"], isTargeted: nil) { providers, location in
+                    return drop(providers: providers)
+                }
         }
     }
+    
+    // Load a URL from the provider
+    private func drop(providers: [NSItemProvider]) -> Bool {
+        let found = providers.loadFirstObject(ofType: URL.self) { url in
+            print("dropped \(url)")
+            document.setBackgroundURL(url)
+        }
+        return found
+    }
+    
     private let defaultEmojiSize: CGFloat = 40
 }
