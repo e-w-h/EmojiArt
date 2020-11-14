@@ -24,7 +24,15 @@ struct EmojiArtDocumentView: View {
                 }
             }
             .padding(.horizontal)
-            Rectangle().foregroundColor(.yellow)
+            // Color can be specified as a view
+            Color.white.overlay(
+                // Group is useful for passing a view with an if statement
+                Group {
+                    if document.backgroundImage != nil {
+                        Image(uiImage: document.backgroundImage!)
+                    }
+                }
+            )
                 .edgesIgnoringSafeArea([.horizontal, .bottom])
                 // Public image is a URI that covers anything that falls under the specification of an image
                 // NSObject providers provide information thats being dropped

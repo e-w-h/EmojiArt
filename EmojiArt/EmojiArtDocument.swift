@@ -15,6 +15,12 @@ class EmojiArtDocument: ObservableObject {
     // Private because viewmodel interprets the view
     @Published private var emojiArt: EmojiArt = EmojiArt()
     
+    // Published so view changes when viewmodel changes
+    // Private so only the viewmodel fetches the image (not the view)
+    // UIImage is different than an Image struct
+    // Optional because we might not have the image
+    @Published private(set) var backgroundImage: UIImage?
+    
     // MARK: - Intent(s)
     
     // View cant access the model directly so it calls intent functions
