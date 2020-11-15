@@ -25,6 +25,7 @@ struct EmojiArtDocumentView: View {
                 }
             }
             .padding(.horizontal)
+            // Used to convert coordinates
             GeometryReader { geometry in
                 ZStack {
                     // Color can be specified as a view
@@ -38,9 +39,11 @@ struct EmojiArtDocumentView: View {
                     )
                         .edgesIgnoringSafeArea([.horizontal, .bottom])
                         // Public image is a URI that covers anything that falls under the specification of an image
+                        // Public text covers the emojis that we want to drop
                         // NSObject providers provide information thats being dropped
                         .onDrop(of: ["public.image", "public.text"], isTargeted: nil) { providers, location in
                             var location = geometry.convert(location, from: .global)
+                            // Convert from iOS coordinate system to custom center grid positioning (0,0 in middle instead of upper left)
                             location = CGPoint(x: location.x - geometry.size.width/2, y: location.y - geometry.size.height/2)
                             return drop(providers: providers, at: location)
                         }
@@ -67,6 +70,7 @@ struct EmojiArtDocumentView: View {
         var found = providers.loadFirstObject(ofType: URL.self) { url in
             document.setBackgroundURL(url)
         }
+        // Loading a string instead of a URL
         if !found {
             found = providers.loadObjects(ofType: String.self) { string in
                 document.addEmoji(string, at: location, size: defaultEmojiSize)
