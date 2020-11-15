@@ -61,7 +61,11 @@ class EmojiArtDocument: ObservableObject {
                     // Drawing always has to happen on the main thread
                     // Posting asynchronously causes the queue to run
                     DispatchQueue.main.async {
-                        self.backgroundImage = UIImage(data: imageData)
+                        // Confirm that the url of the image were loading is the same as the one that the user most recently dragged and dropped
+                        // Very important concept to protect against unknown variables like server response time
+                        if url == self.emojiArt.backgroundURL {
+                            self.backgroundImage = UIImage(data: imageData)
+                        }
                     }
                 }
             }
