@@ -20,33 +20,58 @@ struct EmojiArtDocumentView: View {
                     ForEach(EmojiArtDocument.palette.map { String($0) }, id: \.self) { emoji in
                         Text(emoji)
                             .font(Font.system(size: defaultEmojiSize))
+                            .onDrag { NSItemProvider(object: emoji as NSString) }
                     }
                 }
             }
             .padding(.horizontal)
-            // Color can be specified as a view
-            Color.white.overlay(
-                // Group is useful for passing a view with an if statement
-                Group {
-                    if document.backgroundImage != nil {
-                        Image(uiImage: document.backgroundImage!)
+            GeometryReader { geometry in
+                ZStack {
+                    // Color can be specified as a view
+                    Color.white.overlay(
+                        // Group is useful for passing a view with an if statement
+                        Group {
+                            if document.backgroundImage != nil {
+                                Image(uiImage: document.backgroundImage!)
+                            }
+                        }
+                    )
+                        .edgesIgnoringSafeArea([.horizontal, .bottom])
+                        // Public image is a URI that covers anything that falls under the specification of an image
+                        // NSObject providers provide information thats being dropped
+                        .onDrop(of: ["public.image", "public.text"], isTargeted: nil) { providers, location in
+                            var location = geometry.convert(location, from: .global)
+                            location = CGPoint(x: location.x - geometry.size.width/2, y: location.y - geometry.size.height/2)
+                            return drop(providers: providers, at: location)
+                        }
+                    ForEach(self.document.emojis) { emoji in
+                        Text(emoji.text)
+                            .font(font(for: emoji))
+                            .position(position(for: emoji, in: geometry.size))
                     }
                 }
-            )
-                .edgesIgnoringSafeArea([.horizontal, .bottom])
-                // Public image is a URI that covers anything that falls under the specification of an image
-                // NSObject providers provide information thats being dropped
-                .onDrop(of: ["public.image"], isTargeted: nil) { providers, location in
-                    return drop(providers: providers)
-                }
+            }
         }
     }
     
+    private func font(for emoji: EmojiArt.Emoji) -> Font {
+        Font.system(size: emoji.fontSize)
+    }
+    
+    private func position(for emoji: EmojiArt.Emoji, in size: CGSize) -> CGPoint {
+        CGPoint(x: emoji.location.x + size.width/2, y: emoji.location.y + size.height/2)
+    }
+    
     // Load a URL from the provider
-    private func drop(providers: [NSItemProvider]) -> Bool {
-        let found = providers.loadFirstObject(ofType: URL.self) { url in
-            print("dropped \(url)")
+    private func drop(providers: [NSItemProvider], at location: CGPoint) -> Bool {
+        var found = providers.loadFirstObject(ofType: URL.self) { url in
             document.setBackgroundURL(url)
+        }
+        if !found {
+            found = providers.loadObjects(ofType: String.self) { string in
+                document.addEmoji(string, at: location, size: defaultEmojiSize)
+                document.addEmoji(string, at: location, size: defaultEmojiSize)
+            }
         }
         return found
     }

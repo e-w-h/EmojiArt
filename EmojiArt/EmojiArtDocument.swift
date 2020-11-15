@@ -21,6 +21,9 @@ class EmojiArtDocument: ObservableObject {
     // Optional because we might not have the image
     @Published private(set) var backgroundImage: UIImage?
     
+    // Provide read only access to model
+    var emojis: [EmojiArt.Emoji] { emojiArt.emojis }
+    
     // MARK: - Intent(s)
     
     // View cant access the model directly so it calls intent functions
@@ -72,4 +75,9 @@ class EmojiArtDocument: ObservableObject {
 
         }
     }
+}
+
+extension EmojiArt.Emoji {
+    var fontSize: CGFloat { CGFloat(size) }
+    var location: CGPoint { CGPoint(x: CGFloat(x), y: CGFloat(y)) }
 }

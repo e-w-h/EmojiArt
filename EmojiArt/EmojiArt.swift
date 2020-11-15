@@ -14,8 +14,8 @@ struct EmojiArt {
     // Want to use ForEach so we add Identifiable
     struct Emoji: Identifiable {
         let text: String
-        var x: Int
-        var y: Int
+        var x: Int // offset from center
+        var y: Int // offset from center
         var size: Int
         // Privately managed public variable
         let id: Int
