@@ -18,7 +18,8 @@ class EmojiArtDocument: ObservableObject {
             objectWillChange.send()
         }
         didSet {
-            print(String(data: emojiArt.json!, encoding: .utf8)!)
+            UserDefaults.standard.set(emojiArt.json, forKey: "EmojiArtDocument.Untitled")
+            // print(String(data: emojiArt.json!, encoding: .utf8)!)
         }
     }
     
