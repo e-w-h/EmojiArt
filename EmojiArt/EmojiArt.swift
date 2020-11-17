@@ -7,12 +7,13 @@
 
 import Foundation
 
-struct EmojiArt {
+// Codable protocol is both the Encodable and Decodable protocols
+struct EmojiArt: Codable {
     var backgroundURL: URL?
     var emojis = [Emoji]()
     
     // Want to use ForEach so we add Identifiable
-    struct Emoji: Identifiable {
+    struct Emoji: Identifiable, Codable {
         let text: String
         var x: Int // offset from center
         var y: Int // offset from center
@@ -31,6 +32,10 @@ struct EmojiArt {
             self.size = size
             self.id = id
         }
+    }
+    
+    var json: Data? {
+        return try? JSONEncoder().encode(self)
     }
     
     private var uniqueEmojiId = 0
