@@ -13,7 +13,14 @@ class EmojiArtDocument: ObservableObject {
     
     // Published so that whenever something changes the ObservableObject can redraw
     // Private because viewmodel interprets the view
-    @Published private var emojiArt: EmojiArt = EmojiArt()
+    @Published private var emojiArt: EmojiArt = EmojiArt() {
+        willSet {
+            objectWillChange.send()
+        }
+        didSet {
+            print(String(data: emojiArt.json!, encoding: .utf8)!)
+        }
+    }
     
     // Published so view changes when viewmodel changes
     // Private so only the viewmodel fetches the image (not the view)
