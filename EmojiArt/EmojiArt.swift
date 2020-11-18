@@ -38,6 +38,18 @@ struct EmojiArt: Codable {
         return try? JSONEncoder().encode(self)
     }
     
+    // Failable initializer returns nil if failed and is specified by a question mark
+    init?(json: Data?) {
+        if json != nil, let newEmojiArt = try? JSONDecoder().decode(EmojiArt.self, from: json!) {
+            self = newEmojiArt
+        } else {
+            return nil
+        }
+    }
+    
+    // Lost free initializer and have to specify one
+    init() { }
+    
     private var uniqueEmojiId = 0
     
     mutating func addEmoji(_ text: String, x: Int, y: Int, size: Int) {
