@@ -18,9 +18,18 @@ class EmojiArtDocument: ObservableObject {
             objectWillChange.send()
         }
         didSet {
-            UserDefaults.standard.set(emojiArt.json, forKey: "EmojiArtDocument.Untitled")
+            UserDefaults.standard.set(emojiArt.json, forKey: EmojiArtDocument.untitled)
             // print(String(data: emojiArt.json!, encoding: .utf8)!)
         }
+    }
+    
+    // Guarantees that the key is the same in all instances
+    private static let untitled = "EmojiArtDocument.Untitled"
+    
+    init() {
+        // If it returns nil we create a blank document
+        emojiArt = EmojiArt(json: UserDefaults.standard.data(forKey: EmojiArtDocument.untitled)) ?? EmojiArt()
+        fetchBackgroundImageData()
     }
     
     // Published so view changes when viewmodel changes
