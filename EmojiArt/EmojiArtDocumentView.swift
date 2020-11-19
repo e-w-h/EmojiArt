@@ -53,6 +53,8 @@ struct EmojiArtDocumentView: View {
                             .position(position(for: emoji, in: geometry.size))
                     }
                 }
+                // Ensures that emoji bar is always visible by limiting (clipping) the image to the boundaries of the canvas view
+                .clipped()
             }
         }
     }
