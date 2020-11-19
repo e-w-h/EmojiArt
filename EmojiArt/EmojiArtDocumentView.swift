@@ -31,6 +31,7 @@ struct EmojiArtDocumentView: View {
                     // Color can be specified as a view
                     Color.white.overlay(
                         OptionalImage(uiImage: self.document.backgroundImage)
+                            .scaleEffect(self.zoomScale)
                     )
                     ForEach(self.document.emojis) { emoji in
                         Text(emoji.text)
@@ -48,18 +49,26 @@ struct EmojiArtDocumentView: View {
                     var location = geometry.convert(location, from: .global)
                     // Convert from iOS coordinate system to custom center grid positioning (0,0 in middle instead of upper left)
                     location = CGPoint(x: location.x - geometry.size.width/2, y: location.y - geometry.size.height/2)
+                    location = CGPoint(x: location.x / self.zoomScale, y: location.y / self.zoomScale)
                     return drop(providers: providers, at: location)
                 }
             }
         }
     }
     
+    // UI/visual temporary state
+    // Zoomscale is a ratio for how much were zoomed in or out
+    @State private var zoomScale: CGFloat = 1.0
+    
     private func font(for emoji: EmojiArt.Emoji) -> Font {
-        Font.system(size: emoji.fontSize)
+        Font.system(size: emoji.fontSize * zoomScale)
     }
     
     private func position(for emoji: EmojiArt.Emoji, in size: CGSize) -> CGPoint {
-        CGPoint(x: emoji.location.x + size.width/2, y: emoji.location.y + size.height/2)
+        var location = emoji.location
+        location = CGPoint(x: location.x * zoomScale, y: location.y * zoomScale)
+        location = CGPoint(x: emoji.location.x + size.width/2, y: emoji.location.y + size.height/2)
+        return location
     }
     
     // Load a URL from the provider
