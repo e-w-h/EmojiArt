@@ -60,6 +60,14 @@ struct EmojiArtDocumentView: View {
     // Zoomscale is a ratio for how much were zoomed in or out
     @State private var zoomScale: CGFloat = 1.0
     
+    private func zoomToFit(_ image: UIImage?, in size: CGSize) {
+        if let image = image, image.size.width > 0, image.size.height > 0 {
+            let hZoom = size.width / image.size.width
+            let vZoom = size.height / image.size.height
+            self.zoomScale = min(hZoom, vZoom)
+        }
+    }
+    
     private func font(for emoji: EmojiArt.Emoji) -> Font {
         Font.system(size: emoji.fontSize * zoomScale)
     }
