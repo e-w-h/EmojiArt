@@ -30,7 +30,7 @@ struct EmojiArtDocumentView: View {
                 ZStack {
                     // Color can be specified as a view
                     Color.white.overlay(
-                        OptionalImage(uiImage: document.backgroundImage)
+                        OptionalImage(uiImage: self.document.backgroundImage)
                     )
                     ForEach(self.document.emojis) { emoji in
                         Text(emoji.text)
@@ -78,18 +78,4 @@ struct EmojiArtDocumentView: View {
     }
     
     private let defaultEmojiSize: CGFloat = 40
-}
-
-// Utility that handles a uiImage that might be nil
-struct OptionalImage: View {
-    var uiImage: UIImage?
-    
-    var body: some View {
-        // Group is useful for passing a view with an if statement
-        Group {
-            if uiImage != nil {
-                Image(uiImage: uiImage!)
-            }
-        }
-    }
 }
