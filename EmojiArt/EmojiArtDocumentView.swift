@@ -30,23 +30,8 @@ struct EmojiArtDocumentView: View {
                 ZStack {
                     // Color can be specified as a view
                     Color.white.overlay(
-                        // Group is useful for passing a view with an if statement
-                        Group {
-                            if document.backgroundImage != nil {
-                                Image(uiImage: document.backgroundImage!)
-                            }
-                        }
+                        
                     )
-                        .edgesIgnoringSafeArea([.horizontal, .bottom])
-                        // Public image is a URI that covers anything that falls under the specification of an image
-                        // Public text covers the emojis that we want to drop
-                        // NSObject providers provide information thats being dropped
-                        .onDrop(of: ["public.image", "public.text"], isTargeted: nil) { providers, location in
-                            var location = geometry.convert(location, from: .global)
-                            // Convert from iOS coordinate system to custom center grid positioning (0,0 in middle instead of upper left)
-                            location = CGPoint(x: location.x - geometry.size.width/2, y: location.y - geometry.size.height/2)
-                            return drop(providers: providers, at: location)
-                        }
                     ForEach(self.document.emojis) { emoji in
                         Text(emoji.text)
                             .font(font(for: emoji))
@@ -55,6 +40,16 @@ struct EmojiArtDocumentView: View {
                 }
                 // Ensures that emoji bar is always visible by limiting (clipping) the image to the boundaries of the canvas view
                 .clipped()
+                .edgesIgnoringSafeArea([.horizontal, .bottom])
+                // Public image is a URI that covers anything that falls under the specification of an image
+                // Public text covers the emojis that we want to drop
+                // NSObject providers provide information thats being dropped
+                .onDrop(of: ["public.image", "public.text"], isTargeted: nil) { providers, location in
+                    var location = geometry.convert(location, from: .global)
+                    // Convert from iOS coordinate system to custom center grid positioning (0,0 in middle instead of upper left)
+                    location = CGPoint(x: location.x - geometry.size.width/2, y: location.y - geometry.size.height/2)
+                    return drop(providers: providers, at: location)
+                }
             }
         }
     }
