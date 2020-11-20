@@ -12,5 +12,7 @@ import SwiftUI
 // Changes to the size can be animated
 
 struct AnimatableSystemFontModifier: AnimatableModifier {
-
+    var size: CGFloat
+    var weight: Font.Weight = .regular
+    var design: Font.Design = .default
 }
