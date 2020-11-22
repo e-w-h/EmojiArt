@@ -78,6 +78,24 @@ struct EmojiArtDocumentView: View {
             }
     }
     
+    // Pan gesture
+     @State private var steadyStatePanOffset: CGSize = .zero
+     @GestureState private var gesturePanOffset: CGSize = .zero
+     
+     private var panOffset: CGSize {
+         (steadyStatePanOffset + gesturePanOffset) * zoomScale
+     }
+     
+     private func panGesture() -> some Gesture {
+         DragGesture()
+             .updating($gesturePanOffset) { latestDragGestureValue, gesturePanOffset, transaction in
+                gesturePanOffset = latestDragGestureValue.translation / self.zoomScale
+             }
+             .onEnded { finalDragGestureValue in
+                 self.steadyStatePanOffset = self.steadyStatePanOffset + (finalDragGestureValue.translation / self.zoomScale)
+             }
+     }
+    
     private func doubleTapToZoom(in size: CGSize) -> some Gesture {
         TapGesture(count: 2)
             .onEnded {
