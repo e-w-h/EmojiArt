@@ -42,6 +42,7 @@ struct EmojiArtDocumentView: View {
                     }
                 }
                 .clipped() // Ensures that emoji bar is always visible by limiting (clipping) the image to the boundaries of the canvas view
+                .gesture(self.panGesture())
                 .gesture(self.zoomGesture())
                 .edgesIgnoringSafeArea([.horizontal, .bottom])
                 // Public image is a URI that covers anything that falls under the specification of an image
