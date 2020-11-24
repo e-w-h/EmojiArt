@@ -63,7 +63,7 @@ struct EmojiArtDocumentView: View {
     }
     
     var isLoading: Bool {
-        document.setBackgroundUR != nil && document.backgroundImage == nil
+        document.backgroundURL != nil && document.backgroundImage == nil
     }
     
     // UI/visual temporary state
@@ -134,7 +134,7 @@ struct EmojiArtDocumentView: View {
     // Load a URL from the provider
     private func drop(providers: [NSItemProvider], at location: CGPoint) -> Bool {
         var found = providers.loadFirstObject(ofType: URL.self) { url in
-            document.setBackgroundURL(url)
+            document.backgroundURL = url
         }
         // Loading a string instead of a URL
         if !found {
