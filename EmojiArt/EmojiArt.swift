@@ -13,7 +13,9 @@ struct EmojiArt: Codable {
     var emojis = [Emoji]()
     
     // Want to use ForEach so we add Identifiable
-    struct Emoji: Identifiable, Codable {
+    // Hashable allows the emoji to be put in a set
+    // Emojis can also be keys in a dictionary
+    struct Emoji: Identifiable, Codable, Hashable {
         let text: String
         var x: Int // offset from center
         var y: Int // offset from center
