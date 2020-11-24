@@ -35,7 +35,9 @@ struct EmojiArtDocumentView: View {
                             .offset(self.panOffset)
                     )
                         .gesture(self.doubleTapToZoom(in: geometry.size))
-                    if !self.isLoading {
+                    if self.isLoading {
+                        Image(systemName: "timer").imageScale(.large)
+                    } else {
                         ForEach(self.document.emojis) { emoji in
                             Text(emoji.text)
                                 .font(animatableWithSize: emoji.fontSize * zoomScale)
