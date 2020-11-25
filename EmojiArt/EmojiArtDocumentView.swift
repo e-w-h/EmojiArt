@@ -36,7 +36,7 @@ struct EmojiArtDocumentView: View {
                     )
                         .gesture(self.doubleTapToZoom(in: geometry.size))
                     if self.isLoading {
-                        Image(systemName: "timer").imageScale(.large)
+                        Image(systemName: "timer").imageScale(.large).spinning()
                     } else {
                         ForEach(self.document.emojis) { emoji in
                             Text(emoji.text)

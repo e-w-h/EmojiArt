@@ -17,6 +17,7 @@ struct Spinning: ViewModifier {
     }
 }
 
+// Extend the properties of the spinning struct into a function
 extension View {
     func spinning() -> some View {
         self.modifier(Spinning())
