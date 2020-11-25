@@ -71,30 +71,26 @@ class EmojiArtDocument: ObservableObject {
         }
     }
     
-    // MARK: Multithreading
+    private var fetchImageCancellable: AnyCancellable?
     
     private func fetchBackgroundImageData() {
         // Clear the background image while the app searches the internet for the image
         backgroundImage = nil
         // if let means the app is only fetching if there is a URL to search for
         if let url = emojiArt.backgroundURL {
-            // Data can take a long time to load and we dont want it on the main thread
-            // The if let is still blocking but on a backgrouund queue
-            DispatchQueue.global(qos: .userInitiated).async {
-                // Fetching on the interent can run into a lot of errors that we need "try" to deal with
-                if let imageData = try? Data(contentsOf: url) {
-                    // Drawing always has to happen on the main thread
-                    // Posting asynchronously causes the queue to run
-                    DispatchQueue.main.async {
-                        // Confirm that the url of the image were loading is the same as the one that the user most recently dragged and dropped
-                        // Very important concept to protect against unknown variables like server response time
-                        if url == self.emojiArt.backgroundURL {
-                            self.backgroundImage = UIImage(data: imageData)
-                        }
-                    }
-                }
-            }
-
+            // Cancel previous background image data before fetching the new one
+            fetchImageCancellable?.cancel()
+            let session = URLSession.shared // static var for simple downloads
+            // Tease the publisher to do what you want
+            let publisher = session.dataTaskPublisher(for: url)
+                // map'ed into a different publisher so that it publishes uiimage
+                // Publishes it on the background thread by default
+                .map { data, URLResponse in UIImage(data: data) }
+                // Change it to the main queue
+                .receive(on: DispatchQueue.main)
+                // Change publisher to error type to never to use assign
+                .replaceError(with: nil)
+            fetchImageCancellable = publisher.assign(to: \.backgroundImage, on: self) // EmojiArtDocument is inferred
         }
     }
 }
