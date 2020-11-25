@@ -80,17 +80,16 @@ class EmojiArtDocument: ObservableObject {
         if let url = emojiArt.backgroundURL {
             // Cancel previous background image data before fetching the new one
             fetchImageCancellable?.cancel()
-            let session = URLSession.shared // static var for simple downloads
-            // Tease the publisher to do what you want
-            let publisher = session.dataTaskPublisher(for: url)
+            fetchImageCancellable = URLSession.shared.dataTaskPublisher(for: url) // static var for simple downloads
+                // Tease the publisher to do what you want
                 // map'ed into a different publisher so that it publishes uiimage
                 // Publishes it on the background thread by default
-                .map { data, URLResponse in UIImage(data: data) }
+                .map { data, urlResponse in UIImage(data: data) }
                 // Change it to the main queue
                 .receive(on: DispatchQueue.main)
                 // Change publisher to error type to never to use assign
                 .replaceError(with: nil)
-            fetchImageCancellable = publisher.assign(to: \.backgroundImage, on: self) // EmojiArtDocument is inferred
+                .assign(to: \.backgroundImage, on: self) // EmojiArtDocument is inferred
         }
     }
 }
