@@ -49,6 +49,9 @@ struct EmojiArtDocumentView: View {
                 .gesture(self.panGesture())
                 .gesture(self.zoomGesture())
                 .edgesIgnoringSafeArea([.horizontal, .bottom])
+                .onReceive(self.document.$backgroundImage) { image in
+                    self.zoomToFit(image, in: geometry.size)
+                }
                 // Public image is a URI that covers anything that falls under the specification of an image
                 // Public text covers the emojis that we want to drop
                 // NSObject providers provide information thats being dropped
