@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Combine // Framework for cancellable, publishing, subscribing
 
 class EmojiArtDocument: ObservableObject {
     
@@ -13,22 +14,21 @@ class EmojiArtDocument: ObservableObject {
     
     // Published so that whenever something changes the ObservableObject can redraw
     // Private because viewmodel interprets the view
-    @Published private var emojiArt: EmojiArt = EmojiArt() {
-        willSet {
-            objectWillChange.send()
-        }
-        didSet {
-            UserDefaults.standard.set(emojiArt.json, forKey: EmojiArtDocument.untitled)
-            // print(String(data: emojiArt.json!, encoding: .utf8)!)
-        }
-    }
+    @Published private var emojiArt: EmojiArt
     
     // Guarantees that the key is the same in all instances
     private static let untitled = "EmojiArtDocument.Untitled"
     
+    private var autoSaveCancellable: AnyCancellable?
+    
     init() {
         // If it returns nil we create a blank document
         emojiArt = EmojiArt(json: UserDefaults.standard.data(forKey: EmojiArtDocument.untitled)) ?? EmojiArt()
+        // Use binding to update the publisher causing an auto save every time something changes
+        // Never completes so never fails. Use simple version of sink with receiveValue
+        autoSaveCancellable = $emojiArt.sink { emojiArt in
+            UserDefaults.standard.set(emojiArt.json, forKey: EmojiArtDocument.untitled)
+        }
         fetchBackgroundImageData()
     }
     
