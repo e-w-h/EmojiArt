@@ -13,6 +13,7 @@ struct PaletteChooser: View {
             Stepper(onIncrement: { }, onDecrement: {}, label: { EmptyView() })
             Text("Palette Name")
         }
+        .fixedSize(horizontal: true, vertical: false)
     }
 }
 
