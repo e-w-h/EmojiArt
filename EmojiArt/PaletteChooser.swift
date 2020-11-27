@@ -10,7 +10,7 @@ import SwiftUI
 struct PaletteChooser: View {
     var body: some View {
         HStack {
-            Stepper(onIncrement: { }, onDecrement: {}, label: { Text("Choose Palette") })
+            Stepper(onIncrement: { }, onDecrement: {}, label: { EmptyView() })
             Text("Palette Name")
         }
     }
