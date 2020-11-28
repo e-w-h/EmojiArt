@@ -13,7 +13,7 @@ struct EmojiArtDocumentView: View {
     var body: some View {
         VStack {
             HStack {
-                PaletteChooser()
+                PaletteChooser(document: document)
                 ScrollView(.horizontal) {
                     HStack {
                         // Using an identifiable so that ForEach can iterate through the array
