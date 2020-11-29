@@ -21,6 +21,7 @@ struct PaletteChooser: View {
             Text(self.document.paletteNames[self.chosenPalette] ?? "")
         }
         .fixedSize(horizontal: true, vertical: false)
+        .onAppear { self.chosenPalette = self.document.defaultPalette }
     }
 }
 
