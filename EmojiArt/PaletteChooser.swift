@@ -10,7 +10,8 @@ import SwiftUI
 struct PaletteChooser: View {
     @ObservedObject var document: EmojiArtDocument
     
-    @State private var chosenPalette: String = ""
+    @Binding var chosenPalette: String
+    
     var body: some View {
         HStack {
             // Initialization process
@@ -22,13 +23,11 @@ struct PaletteChooser: View {
             Text(self.document.paletteNames[self.chosenPalette] ?? "")
         }
         .fixedSize(horizontal: true, vertical: false)
-        // Initialized variable can be set in on appear
-        .onAppear { self.chosenPalette = self.document.defaultPalette }
     }
 }
 
 struct PaletteChooser_Previews: PreviewProvider {
     static var previews: some View {
-        PaletteChooser(document: EmojiArtDocument())
+        PaletteChooser(document: EmojiArtDocument(), chosenPalette: Binding.constant(""))
     }
 }

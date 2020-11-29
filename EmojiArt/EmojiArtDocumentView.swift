@@ -15,7 +15,8 @@ struct EmojiArtDocumentView: View {
     var body: some View {
         VStack {
             HStack {
-                PaletteChooser(document: document)
+                // Set chosenpalette to projected value fo the binding
+                PaletteChooser(document: document, chosenPalette: $chosenPalette)
                 ScrollView(.horizontal) {
                     HStack {
                         // Using an identifiable so that ForEach can iterate through the array
