@@ -13,6 +13,7 @@ struct PaletteChooser: View {
     @State private var chosenPalette: String = ""
     var body: some View {
         HStack {
+            // Initialization process
             Stepper(onIncrement: {
                 self.chosenPalette = self.document.palette(after: self.chosenPalette)
             }, onDecrement: {
@@ -21,6 +22,7 @@ struct PaletteChooser: View {
             Text(self.document.paletteNames[self.chosenPalette] ?? "")
         }
         .fixedSize(horizontal: true, vertical: false)
+        // Initialized variable can be set in on appear
         .onAppear { self.chosenPalette = self.document.defaultPalette }
     }
 }

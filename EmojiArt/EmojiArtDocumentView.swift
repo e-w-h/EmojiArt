@@ -10,6 +10,8 @@ import SwiftUI
 struct EmojiArtDocumentView: View {
     @ObservedObject var document: EmojiArtDocument
     
+    @State private var chosenPalette: String = ""
+    
     var body: some View {
         VStack {
             HStack {
@@ -19,15 +21,15 @@ struct EmojiArtDocumentView: View {
                         // Using an identifiable so that ForEach can iterate through the array
                         // Everything in Swift has an invisible var called self
                         // Swift has syntax called keypath that specifies the var on the object using backslash
-                        ForEach(EmojiArtDocument.palette.map { String($0) }, id: \.self) { emoji in
+                        ForEach(chosenPalette.map { String($0) }, id: \.self) { emoji in
                             Text(emoji)
                                 .font(Font.system(size: defaultEmojiSize))
                                 .onDrag { NSItemProvider(object: emoji as NSString) }
                         }
                     }
                 }
+                .onAppear { self.chosenPalette = self.document.defaultPalette }
             }
-            .padding(.horizontal)
             // Used to convert coordinates
             GeometryReader { geometry in
                 ZStack {
