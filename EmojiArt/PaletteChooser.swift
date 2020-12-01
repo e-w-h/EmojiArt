@@ -26,8 +26,12 @@ struct PaletteChooser: View {
                 .onTapGesture {
                     self.showPaletteEditor = true
                 }
+                // Generally an iPad feature due to the large space
+                // On an iPhone a popover uses the entire screen
                 .popover(isPresented: $showPaletteEditor) {
                     PaletteEditor()
+                        // Set a minimum size for the view
+                        .frame(minWidth: 300, minHeight: 500)
                 }
         }
         .fixedSize(horizontal: true, vertical: false)
