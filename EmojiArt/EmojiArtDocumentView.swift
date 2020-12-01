@@ -12,6 +12,12 @@ struct EmojiArtDocumentView: View {
     
     @State private var chosenPalette: String = ""
     
+    // Initialize state in an initializer by setting the struct directly
+    init(document: EmojiArtDocument) {
+        self.document = document
+        _chosenPalette = State(wrappedValue: self.document.defaultPalette)
+    }
+    
     var body: some View {
         VStack {
             HStack {
