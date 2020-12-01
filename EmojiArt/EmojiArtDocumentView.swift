@@ -35,7 +35,6 @@ struct EmojiArtDocumentView: View {
                         }
                     }
                 }
-                .onAppear { self.chosenPalette = self.document.defaultPalette }
             }
             // Used to convert coordinates
             GeometryReader { geometry in
