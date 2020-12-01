@@ -29,7 +29,7 @@ struct PaletteChooser: View {
                 // Generally an iPad feature due to the large space
                 // On an iPhone a popover uses the entire screen
                 .popover(isPresented: $showPaletteEditor) {
-                    PaletteEditor()
+                    PaletteEditor(chosenPalette: self.$chosenPalette)
                         // Set a minimum size for the view
                         .frame(minWidth: 300, minHeight: 500)
                 }
@@ -39,8 +39,15 @@ struct PaletteChooser: View {
 }
 
 struct PaletteEditor: View {
+    // Two bindings should have the same name so we know theyre bound
+    @Binding var chosenPalette: String
+    
     var body: some View {
-        Text("Palette Editor")
+        VStack {
+            Text("Palette Editor")
+            Divider()
+            Text(chosenPalette)
+        }
     }
 }
 
