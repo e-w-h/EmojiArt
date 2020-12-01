@@ -21,6 +21,7 @@ struct PaletteChooser: View {
                 self.chosenPalette = self.document.palette(before: self.chosenPalette)
             }, label: { EmptyView() })
             Text(self.document.paletteNames[self.chosenPalette] ?? "")
+            Image(systemName: "keyboard").imageScale(.large)
         }
         .fixedSize(horizontal: true, vertical: false)
     }
