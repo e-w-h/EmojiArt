@@ -30,6 +30,8 @@ struct PaletteChooser: View {
                 // On an iPhone a popover uses the entire screen
                 .popover(isPresented: $showPaletteEditor) {
                     PaletteEditor(chosenPalette: self.$chosenPalette)
+                        // For the environment object in the palette editor struct
+                        .environmentObject(self.document)
                         // Set a minimum size for the view
                         .frame(minWidth: 300, minHeight: 500)
                 }
@@ -39,6 +41,9 @@ struct PaletteChooser: View {
 }
 
 struct PaletteEditor: View {
+    // Pass the view model to a separate view using an environment object
+    @EnvironmentObject var document: EmojiArtDocument
+    
     // Two bindings should have the same name so we know theyre bound
     @Binding var chosenPalette: String
     
@@ -46,7 +51,7 @@ struct PaletteEditor: View {
         VStack(spacing: 0) {
             Text("Palette Editor").font(.headline).padding()
             Divider()
-            Text(chosenPalette).padding()
+            Text(self.document.paletteNames[self.chosenPalette] ?? "").padding()
             // Moves the text to the top
             Spacer()
         }
