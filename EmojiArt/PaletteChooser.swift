@@ -47,11 +47,14 @@ struct PaletteEditor: View {
     // Two bindings should have the same name so we know theyre bound
     @Binding var chosenPalette: String
     
+    @State private var paletteName: String = ""
+    
     var body: some View {
         VStack(spacing: 0) {
             Text("Palette Editor").font(.headline).padding()
             Divider()
-            Text(self.document.paletteNames[self.chosenPalette] ?? "").padding()
+            TextField("Palette Name", text: $paletteName)
+                .padding()
             // Moves the text to the top
             Spacer()
         }
