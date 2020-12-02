@@ -43,10 +43,12 @@ struct PaletteEditor: View {
     @Binding var chosenPalette: String
     
     var body: some View {
-        VStack {
-            Text("Palette Editor")
+        VStack(spacing: 0) {
+            Text("Palette Editor").font(.headline).padding()
             Divider()
-            Text(chosenPalette)
+            Text(chosenPalette).padding()
+            // Moves the text to the top
+            Spacer()
         }
     }
 }
