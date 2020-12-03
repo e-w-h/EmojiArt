@@ -53,7 +53,12 @@ struct PaletteEditor: View {
         VStack(spacing: 0) {
             Text("Palette Editor").font(.headline).padding()
             Divider()
-            TextField("Palette Name", text: $paletteName)
+            // Update the displayed name after editing
+            TextField("Palette Name", text: $paletteName, onEditingChanged: { began in
+                if !began {
+                    self.document.renamePalette(self.chosenPalette, to: self.paletteName)
+                }
+            })
                 .padding()
             // Moves the text to the top
             Spacer()
