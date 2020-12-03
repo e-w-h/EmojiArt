@@ -58,6 +58,8 @@ struct PaletteEditor: View {
             // Moves the text to the top
             Spacer()
         }
+        // Use on appear to initialize the palettename string
+        .onAppear { self.paletteName = self.document.paletteNames[self.chosenPalette] ?? "" }
     }
 }
 
