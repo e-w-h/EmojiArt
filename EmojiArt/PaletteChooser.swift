@@ -71,6 +71,16 @@ struct PaletteEditor: View {
                         }
                     })
                 }
+                Section(header: Text("Remove Emoji")) {
+                    VStack {
+                        ForEach(chosenPalette.map { String($0) }, id: \.self) { emoji in
+                            Text(emoji)
+                                .onTapGesture {
+                                    self.chosenPalette = self.document.removeEmoji(emoji, fromPalette: self.chosenPalette)
+                                }
+                        }
+                    }
+                }
             }
         }
         // Use on appear to initialize the palettename string
