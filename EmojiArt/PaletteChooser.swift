@@ -57,15 +57,13 @@ struct PaletteEditor: View {
             Divider()
             // Form takes care of layout so no need for spacer or padding
             Form {
-                Section(header: Text("Palette Name")) {
+                Section {
                     // Update the displayed name after editing
                     TextField("Palette Name", text: $paletteName, onEditingChanged: { began in
                         if !began {
                             self.document.renamePalette(self.chosenPalette, to: self.paletteName)
                         }
                     })
-                }
-                Section {
                     TextField("Add Emoji", text: $emojisToAdd, onEditingChanged: { began in
                         if !began {
                             self.chosenPalette = self.document.addEmoji(self.emojisToAdd, toPalette: self.chosenPalette)
