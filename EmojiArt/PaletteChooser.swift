@@ -55,21 +55,25 @@ struct PaletteEditor: View {
         VStack(spacing: 0) {
             Text("Palette Editor").font(.headline).padding()
             Divider()
-            // Update the displayed name after editing
-            TextField("Palette Name", text: $paletteName, onEditingChanged: { began in
-                if !began {
-                    self.document.renamePalette(self.chosenPalette, to: self.paletteName)
+            // Form takes care of layout so no need for spacer or padding
+            Form {
+                Section(header: Text("Palette Name")) {
+                    // Update the displayed name after editing
+                    TextField("Palette Name", text: $paletteName, onEditingChanged: { began in
+                        if !began {
+                            self.document.renamePalette(self.chosenPalette, to: self.paletteName)
+                        }
+                    })
                 }
-            })
-            TextField("Add Emoji", text: $emojisToAdd, onEditingChanged: { began in
-                if !began {
-                    self.chosenPalette = self.document.addEmoji(self.emojisToAdd, toPalette: self.chosenPalette)
-                    self.emojisToAdd = ""
+                Section {
+                    TextField("Add Emoji", text: $emojisToAdd, onEditingChanged: { began in
+                        if !began {
+                            self.chosenPalette = self.document.addEmoji(self.emojisToAdd, toPalette: self.chosenPalette)
+                            self.emojisToAdd = ""
+                        }
+                    })
                 }
-            })
-                .padding()
-            // Moves the text to the top
-            Spacer()
+            }
         }
         // Use on appear to initialize the palettename string
         .onAppear { self.paletteName = self.document.paletteNames[self.chosenPalette] ?? "" }
