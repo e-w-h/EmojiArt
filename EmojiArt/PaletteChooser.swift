@@ -28,8 +28,8 @@ struct PaletteChooser: View {
                 }
                 // Generally an iPad feature due to the large space
                 // On an iPhone a popover uses the entire screen
-                .popover(isPresented: $showPaletteEditor) {
-                    PaletteEditor(chosenPalette: self.$chosenPalette)
+                .sheet(isPresented: $showPaletteEditor) {
+                    PaletteEditor(chosenPalette: self.$chosenPalette, isShowing: $showPaletteEditor)
                         // For the environment object in the palette editor struct
                         .environmentObject(self.document)
                         // Set a minimum size for the view
@@ -46,14 +46,21 @@ struct PaletteEditor: View {
     
     // Two bindings should have the same name so we know theyre bound
     @Binding var chosenPalette: String
-    
+    @Binding var isShowing: Bool
     @State private var paletteName: String = ""
-    
     @State private var emojisToAdd: String = ""
     
     var body: some View {
         VStack(spacing: 0) {
-            Text("Palette Editor").font(.headline).padding()
+            ZStack {
+                Text("Palette Editor").font(.headline).padding()
+                HStack {
+                    Spacer()
+                    Button(action: {
+                        self.isShowing = false
+                    }, label: { Text("Done") }).padding()
+                }
+            }
             Divider()
             // Form takes care of layout so no need for spacer or padding
             Form {
