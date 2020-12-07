@@ -52,7 +52,7 @@ extension EmojiArtDocument
     
     @discardableResult
     func addEmoji(_ emoji: String, toPalette palette: String) -> String {
-        return changePalette(palette, to: (emoji + palette).uniqued())
+        return changePalette(palette, to: (emoji + palette))
     }
     
     @discardableResult
