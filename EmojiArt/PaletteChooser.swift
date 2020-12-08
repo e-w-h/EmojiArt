@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct PaletteChooser: View {
-    @ObservedObject var document: EmojiArtDocument
+    @ObservedObject var document: EmojiArtDocument  // The view model
     
     @Binding var chosenPalette: String
     @State private var showPaletteEditor = false
@@ -41,7 +41,7 @@ struct PaletteChooser: View {
 }
 
 struct PaletteEditor: View {
-    // Pass the view model to a separate view using an environment object
+    // Pass the view model to a separate view (the popover) using an environment object
     @EnvironmentObject var document: EmojiArtDocument
     
     // Two bindings should have the same name so we know theyre bound
