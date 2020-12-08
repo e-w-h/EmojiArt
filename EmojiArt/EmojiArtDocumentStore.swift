@@ -9,8 +9,8 @@
 import SwiftUI
 import Combine
 
-class EmojiArtDocumentStore: ObservableObject
-{
+// View model thats mainly storage with little logic
+class EmojiArtDocumentStore: ObservableObject {
     let name: String
     
     func name(for document: EmojiArtDocument) -> String {
@@ -43,6 +43,7 @@ class EmojiArtDocumentStore: ObservableObject
     init(named name: String = "Emoji Art") {
         self.name = name
         let defaultsKey = "EmojiArtDocumentStore.\(name)"
+        // UserDefaults only stores property lists
         documentNames = Dictionary(fromPropertyList: UserDefaults.standard.object(forKey: defaultsKey))
         autosave = $documentNames.sink { names in
             UserDefaults.standard.set(names.asPropertyList, forKey: defaultsKey)
@@ -50,6 +51,8 @@ class EmojiArtDocumentStore: ObservableObject
     }
 }
 
+// Converts a dictionary to a property list so that it can be stored in UserDefaults
+// Not very important because UserDefaults is an old interface
 extension Dictionary where Key == EmojiArtDocument, Value == String {
     var asPropertyList: [String:String] {
         var uuidToName = [String:String]()

@@ -8,8 +8,23 @@
 import SwiftUI
 import Combine // Framework for cancellable, publishing, subscribing
 
-class EmojiArtDocument: ObservableObject {
+class EmojiArtDocument: ObservableObject, Hashable, Identifiable {
     
+    // Inheritance aspect with hashable and equatable
+    // Only works for a reference type or a class in the heap
+    // Not useful for structs that are copied
+    static func == (lhs: EmojiArtDocument, rhs: EmojiArtDocument) -> Bool {
+        lhs.id == rhs.id
+    }
+    
+    // Struct that generates something unique
+    let id: UUID
+    
+    func hash(into hasher: inout Hasher) {
+        // Combine something unique enough to be in a hashtable with the hasher
+        hasher.combine(id)
+    }
+        
     static let palette: String = "⭐️🌧🍎"
     
     // Published so that whenever something changes the ObservableObject can redraw
@@ -21,13 +36,18 @@ class EmojiArtDocument: ObservableObject {
     
     private var autoSaveCancellable: AnyCancellable?
     
-    init() {
+    // Defaulting which allows for an init with no arguments
+    // Further flexibility obtained using an optional with nil default
+    // Keeps the default internal
+    init(id: UUID? = nil) {
+        self.id = id ?? UUID()
+        let defaultsKey = "EmojiArtDocument.\(self.id.uuidString)"
         // If it returns nil we create a blank document
-        emojiArt = EmojiArt(json: UserDefaults.standard.data(forKey: EmojiArtDocument.untitled)) ?? EmojiArt()
+        emojiArt = EmojiArt(json: UserDefaults.standard.data(forKey: defaultsKey)) ?? EmojiArt()
         // Use binding to update the publisher causing an auto save every time something changes
         // Never completes so never fails. Use simple version of sink with receiveValue
         autoSaveCancellable = $emojiArt.sink { emojiArt in
-            UserDefaults.standard.set(emojiArt.json, forKey: EmojiArtDocument.untitled)
+            UserDefaults.standard.set(emojiArt.json, forKey: defaultsKey)
         }
         fetchBackgroundImageData()
     }
