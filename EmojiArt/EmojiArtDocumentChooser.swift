@@ -11,6 +11,8 @@ struct EmojiArtDocumentChooser: View {
     // Common to use environment object for a top level view
     @EnvironmentObject var store: EmojiArtDocumentStore
     
+    @State private var editMode: EditMode = .inactive  // Active, inactive or transient
+    
     var body: some View {
         // Encapsulates the list view with a header space for a title
         // Title can be set on each view within the navigation
@@ -36,8 +38,12 @@ struct EmojiArtDocumentChooser: View {
                 Image(systemName: "plus").imageScale(.large)
                 
             }),
+            // Button to go into edit mode
             trailing: EditButton()
             )
+            // Set Environment for view we're calling it on
+            // View must have the edit button which is why this code is below the button
+            .environment(\.editMode, $editMode)
         }
     }
 }
