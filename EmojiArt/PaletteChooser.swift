@@ -28,7 +28,7 @@ struct PaletteChooser: View {
                 }
                 // Generally an iPad feature due to the large space
                 // On an iPhone a popover uses the entire screen
-                .sheet(isPresented: $showPaletteEditor) {
+                .popover(isPresented: $showPaletteEditor) {
                     PaletteEditor(chosenPalette: self.$chosenPalette, isShowing: $showPaletteEditor)
                         // For the environment object in the palette editor struct
                         .environmentObject(self.document)
