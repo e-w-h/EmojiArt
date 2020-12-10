@@ -75,7 +75,7 @@ struct EmojiArtDocumentView: View {
                     return drop(providers: providers, at: location)
                 }
                 .navigationBarItems(trailing: Button(action: {
-                    if let url = UIPasteboard.general.url {
+                    if let url = UIPasteboard.general.url, url != document.backgroundURL {
                         confirmBackgroundPaste = true
                     
                     } else {
