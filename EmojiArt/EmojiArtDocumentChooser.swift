@@ -35,7 +35,9 @@ struct EmojiArtDocumentChooser: View {
             .navigationBarItems(leading: Button(action: { self.store.addDocument() }, label: {
                 Image(systemName: "plus").imageScale(.large)
                 
-            }))
+            }),
+            trailing: EditButton()
+            )
         }
     }
 }
