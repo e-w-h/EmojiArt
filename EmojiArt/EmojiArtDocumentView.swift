@@ -90,15 +90,12 @@ struct EmojiArtDocumentView: View {
         document.backgroundURL != nil && document.backgroundImage == nil
     }
     
-    // UI/visual temporary state
-    // Zoomscale is a ratio for how much were zoomed in or out
-    @State private var steadyStateZoomScale: CGFloat = 1.0
     // Can be of any type and different from steady state
     // Keeps track of the changes in scale while pinching
     @GestureState private var gestureZoomScale: CGFloat = 1.0
     
     private var zoomScale: CGFloat {
-        steadyStateZoomScale * gestureZoomScale
+        document.steadyStateZoomScale * gestureZoomScale
     }
     
     private func zoomGesture() -> some Gesture {
@@ -107,16 +104,15 @@ struct EmojiArtDocumentView: View {
                 ourGestureStateInOut = latestGestureScale
             }
             .onEnded { finalGestureScale in
-                self.steadyStateZoomScale *= finalGestureScale
+                document.steadyStateZoomScale *= finalGestureScale
             }
     }
     
     // Pan gesture
-     @State private var steadyStatePanOffset: CGSize = .zero
      @GestureState private var gesturePanOffset: CGSize = .zero
      
      private var panOffset: CGSize {
-         (steadyStatePanOffset + gesturePanOffset) * zoomScale
+        (document.steadyStatePanOffset + gesturePanOffset) * zoomScale
      }
      
      private func panGesture() -> some Gesture {
@@ -125,7 +121,7 @@ struct EmojiArtDocumentView: View {
                 gesturePanOffset = latestDragGestureValue.translation / self.zoomScale
              }
              .onEnded { finalDragGestureValue in
-                 self.steadyStatePanOffset = self.steadyStatePanOffset + (finalDragGestureValue.translation / self.zoomScale)
+                 document.steadyStatePanOffset = document.steadyStatePanOffset + (finalDragGestureValue.translation / self.zoomScale)
              }
      }
     
@@ -142,8 +138,8 @@ struct EmojiArtDocumentView: View {
         if let image = image, image.size.width > 0, image.size.height > 0, size.height > 0, size.width > 0 {
             let hZoom = size.width / image.size.width
             let vZoom = size.height / image.size.height
-            self.steadyStatePanOffset = .zero
-            self.steadyStateZoomScale = min(hZoom, vZoom)
+            document.steadyStatePanOffset = .zero
+            document.steadyStateZoomScale = min(hZoom, vZoom)
         }
     }
     

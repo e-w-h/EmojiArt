@@ -58,6 +58,11 @@ class EmojiArtDocument: ObservableObject, Hashable, Identifiable {
     // Optional because we might not have the image
     @Published private(set) var backgroundImage: UIImage?
     
+    // UI/visual temporary state
+    // Zoomscale is a ratio for how much were zoomed in or out
+    @Published var steadyStateZoomScale: CGFloat = 1.0
+    @Published var steadyStatePanOffset: CGSize = .zero
+    
     // Provide read only access to model
     var emojis: [EmojiArt.Emoji] { emojiArt.emojis }
     
