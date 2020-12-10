@@ -22,6 +22,14 @@ struct EmojiArtDocumentChooser: View {
                         Text(self.store.name(for: document))
                     }
                 }
+                // Swipe to delete
+                // For all the things in an index set remove the documents
+                // Coding style is advanced in swift but widely used
+                .onDelete { indexSet in
+                    indexSet.map { store.documents[$0] }.forEach { document in
+                        store.removeDocument(document)
+                    }
+                }
             }
             .navigationBarTitle(self.store.name)
             .navigationBarItems(leading: Button(action: { self.store.addDocument() }, label: {
