@@ -34,12 +34,15 @@ struct EmojiArtDocumentChooser: View {
                 }
             }
             .navigationBarTitle(self.store.name)
-            .navigationBarItems(leading: Button(action: { self.store.addDocument() }, label: {
-                Image(systemName: "plus").imageScale(.large)
+            .navigationBarItems(
+                leading: Button(action: {
+                    self.store.addDocument()
+                }, label: {
+                    Image(systemName: "plus").imageScale(.large)
                 
-            }),
-            // Button to go into edit mode
-            trailing: EditButton()
+                }),
+                // Button to go into edit mode
+                trailing: EditButton()
             )
             // Set Environment for view we're calling it on
             // View must have the edit button which is why this code is below the button
