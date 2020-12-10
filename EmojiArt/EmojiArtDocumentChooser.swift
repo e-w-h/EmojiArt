@@ -20,8 +20,10 @@ struct EmojiArtDocumentChooser: View {
             // List is a powerful VStack with a vertical scroll
             List {
                 ForEach(store.documents) { document in
-                    NavigationLink(destination: EmojiArtDocumentView(document: document).navigationBarTitle(self.store.name(for: document))) {
-                        Text(self.store.name(for: document))
+                    NavigationLink(destination: EmojiArtDocumentView(document: document).navigationBarTitle(store.name(for: document))) {
+                        EditableText(store.name(for: document), isEditing: editMode.isEditing) { name in
+                            store.setName(name, for: document)
+                        }
                     }
                 }
                 // Swipe to delete
@@ -36,7 +38,7 @@ struct EmojiArtDocumentChooser: View {
             .navigationBarTitle(self.store.name)
             .navigationBarItems(
                 leading: Button(action: {
-                    self.store.addDocument()
+                    store.addDocument()
                 }, label: {
                     Image(systemName: "plus").imageScale(.large)
                 
