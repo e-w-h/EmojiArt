@@ -76,7 +76,7 @@ struct EmojiArtDocumentView: View {
                 }
                 .navigationBarItems(trailing: Button(action: {
                     if let url = UIPasteboard.general.url {
-                        self.document.backgroundURL = url
+                        confirmBackgroundPaste = true
                     
                     } else {
                         explainBackgroundPaste = true
@@ -84,7 +84,8 @@ struct EmojiArtDocumentView: View {
                 }, label: {
                     Image(systemName: "doc.on.clipboard").imageScale(.large)
                         // View modifier similar to popover
-                        .alert(isPresented: $explainBackgroundPaste) { () -> Alert in
+                        // Only one alert per view when using "isPresented"
+                        .alert(isPresented: $explainBackgroundPaste) {
                             return Alert(
                                 title: Text("Paste Background"),
                                 message: Text("Copy the URL of an image to the clip board and touch this button to make it the background of your document."),
@@ -94,9 +95,21 @@ struct EmojiArtDocumentView: View {
                 }))
             }
         }
+        .alert(isPresented: $confirmBackgroundPaste) {
+            Alert(title: Text("Paste Background"),
+                  message: Text("Replace your background with \(UIPasteboard.general.url?.absoluteString ?? "nothing")?."),
+                  primaryButton: .default(Text("Okay")) {
+                    self.document.backgroundURL = UIPasteboard.general.url
+                  },
+                  secondaryButton: .cancel()
+            )
+        }
     }
     
+    // Could be an enum
     @State private var explainBackgroundPaste = false
+    @State private var confirmBackgroundPaste = false
+
     
     var isLoading: Bool {
         document.backgroundURL != nil && document.backgroundImage == nil
