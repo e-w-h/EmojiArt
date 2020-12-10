@@ -78,13 +78,25 @@ struct EmojiArtDocumentView: View {
                     if let url = UIPasteboard.general.url {
                         self.document.backgroundURL = url
                     
+                    } else {
+                        explainBackgroundPaste = true
                     }
                 }, label: {
                     Image(systemName: "doc.on.clipboard").imageScale(.large)
+                        // View modifier similar to popover
+                        .alert(isPresented: $explainBackgroundPaste) { () -> Alert in
+                            return Alert(
+                                title: Text("Paste Background"),
+                                message: Text("Copy the URL of an image to the clip board and touch this button to make it the background of your document."),
+                                dismissButton: .default(Text("Okay"))
+                            )
+                        }
                 }))
             }
         }
     }
+    
+    @State private var explainBackgroundPaste = false
     
     var isLoading: Bool {
         document.backgroundURL != nil && document.backgroundImage == nil
